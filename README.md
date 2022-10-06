@@ -8,7 +8,8 @@ Feel free to submit any feature or pull request if you think that it may be usef
 
 ## Available templates
 
-- docker-compose template for web-applications with traefik reverse proxy
+- docker-compose template for web-applications with [traefik](https://traefik.io/) reverse proxy
+- [earthly](https://www.earthly.dev/) template for node-based applications
 
 ## Todo
 

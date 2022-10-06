@@ -1,0 +1,22 @@
+VERSION 0.6
+FROM node:latest
+WORKDIR /app
+ARG image_name=application
+ARG org_name=org
+
+deps: 
+  RUN npm install -g pnpm
+  COPY package.json pnpm-lock.yaml* ./
+  RUN pnpm install
+  SAVE ARTIFACT package.json   AS LOCAL ./package.json
+  SAVE ARTIFACT pnpm-lock.yaml AS LOCAL ./pnpm-lock.yaml
+
+build:
+  FROM +deps
+  COPY . .
+
+docker:
+  FROM +build
+  EXPOSE 8080
+  ENTRYPOINT [ "node", "server.js" ]
+  SAVE IMAGE --push ${org_name}/${image_name}:latest
