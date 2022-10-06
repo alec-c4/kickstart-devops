@@ -1,0 +1,106 @@
+version: '3.9'
+
+services:
+
+### Services 
+
+  postgres:
+    container_name: "${APP_NAME}-postgres"
+    build:
+      context: services/postgres
+      dockerfile: Dockerfile 
+    expose:
+      - 5432   
+    networks:
+      - internal      
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    environment:
+      POSTGRES_HOST: ${POSTGRES_HOST}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_PORT: ${POSTGRES_PORT}
+    healthcheck:
+      test: [ "CMD", "pg_isready" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  traefik:
+    container_name: "${APP_NAME}-traefik"
+    build:
+      context: services/traefik
+      dockerfile: Dockerfile 
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"   
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    ports:
+      - "80:80"
+      - "8080:8080"            
+    scale: 1     
+    networks:
+      - internal
+      - external
+
+### Apps
+
+  app-main:
+    container_name: "${APP_NAME}-main"
+    build:
+      context: apps/main
+      dockerfile: Dockerfile
+    scale: 1     
+    networks:
+      - internal
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.${APP_NAME}-main.rule=Host(`${APP_MAIN_DOMAIN}`)"
+      - "traefik.http.routers.${APP_NAME}-main.entrypoints=web"  
+
+  app-admin:
+    image: "nginxdemos/hello"
+    container_name: "${APP_NAME}-admin"
+    scale: 1     
+    networks:
+      - internal
+    environment:
+      POSTGRES_HOST: ${POSTGRES_HOST}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_PORT: ${POSTGRES_PORT}      
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.${APP_NAME}-admin.rule=Host(`${APP_ADMIN_DOMAIN}`)"
+      - "traefik.http.routers.${APP_NAME}-admin.entrypoints=web"    
+
+  app-api:
+    container_name: "${APP_NAME}-api"
+    scale: 1     
+    networks:
+      - internal
+    environment:
+      POSTGRES_HOST: ${POSTGRES_HOST}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_PORT: ${POSTGRES_PORT}      
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.${APP_NAME}-api.rule=Host(`${APP_API_DOMAIN}`)"
+      - "traefik.http.routers.${APP_NAME}-api.entrypoints=web"    
+
+### Infrastructure
+
+networks:
+  external:
+  internal:
+    driver: bridge
+
+volumes:
+  postgres:

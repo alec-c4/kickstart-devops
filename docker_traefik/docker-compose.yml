@@ -1,0 +1,28 @@
+version: '3.9'
+
+services:
+
+### Services 
+
+  postgres:
+    image: "${APP_NAME}-postgres"
+
+  traefik:
+    image: "${APP_NAME}-traefik"
+    depends_on:
+      - postgres
+      - app-main
+      - app-admin
+      - app-api
+
+### Apps
+
+  app-main:
+    container_name: "${APP_NAME}-main"
+
+  app-admin:
+    image: "nginxdemos/hello"
+
+  app-api:
+    image: "traefik/whoami"
+  

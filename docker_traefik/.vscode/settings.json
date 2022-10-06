@@ -1,0 +1,8 @@
+{
+  "editor.formatOnSave": true,
+  "editor.minimap.enabled": false,
+  "editor.tabSize": 2,
+  "files.autoSave": "onFocusChange",
+  "git.autofetch": true,
+  "workbench.startupEditor": "none"
+}
