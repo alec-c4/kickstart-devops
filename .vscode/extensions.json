@@ -1,0 +1,21 @@
+{
+  "recommendations": [
+    "bungcip.better-toml",
+    "eamodio.gitlens",
+    "earthly.earthfile-syntax-highlighting",
+    "formulahendry.auto-close-tag",
+    "formulahendry.auto-rename-tag",
+    "hashicorp.terraform",
+    "mechatroner.rainbow-csv",
+    "mikestead.dotenv",
+    "ms-azuretools.vscode-docker",
+    "ms-kubernetes-tools.vscode-kubernetes-tools",
+    "ms-vscode.makefile-tools",
+    "ms-vscode-remote.remote-containers",
+    "oderwat.indent-rainbow",
+    "RLNT.keep-a-changelog",
+    "shd101wyy.markdown-preview-enhanced",
+    "xadillax.viml",
+    "ZainChen.json",
+  ]
+}
