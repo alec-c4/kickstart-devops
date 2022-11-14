@@ -1,0 +1,32 @@
+---
+- name: Install aptitude
+  tags: [ 'setup' ]
+  apt:
+    name: aptitude
+    state: latest
+    update_cache: true
+    
+- name: Install basic packages
+  tags: [ 'setup' ]
+  apt:
+    name: '{{ item }}'
+    update_cache: yes
+  with_items:
+    - build-essential 
+    - curl 
+    - exa
+    - fail2ban
+    - g++
+    - gcc 
+    - git
+    - git-core 
+    - htop
+    - httpie
+    - make 
+    - ncdu
+    - ripgrep
+    - tldr
+    - tmux
+    - tree
+    - ufw
+    - unzip

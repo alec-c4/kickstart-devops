@@ -1,0 +1,49 @@
+---
+- name: Install required system packages
+  tags: [ 'setup', 'docker' ]
+  apt:
+    name: '{{ item }}'
+    update_cache: yes
+    state: latest
+  with_items:
+    - apt-transport-https
+    - ca-certificates
+    - curl 
+    - software-properties-common
+    - python3-pip
+    - virtualenv
+    - python3-setuptools
+
+- name: Add Docker GPG apt Key
+  tags: [ 'docker' ]
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+
+- name: Add Docker Repository
+  tags: [ 'docker' ]
+  apt_repository:
+    repo: deb https://download.docker.com/linux/ubuntu focal stable
+    state: present
+
+- name: Update apt and install docker-ce
+  tags: [ 'docker' ]
+  apt:
+    name: '{{ item }}'
+    state: latest
+    update_cache: true
+  with_items:
+    - docker-ce
+    - docker-compose
+
+- name: Install Docker Module for Python
+  tags: [ 'docker' ]
+  pip:
+    name: docker
+
+- name: adding existing user '{{ ansible_user }}' to group docker
+  tags: [ 'docker' ]
+  user:
+    name: '{{ ansible_user }}'
+    groups: docker
+    append: yes    

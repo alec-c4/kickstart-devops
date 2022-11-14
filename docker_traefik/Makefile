@@ -26,6 +26,10 @@ build:
 	@# Help: (dev) Build
 	@docker compose build
 
+prune:
+	@# Help: (dev) Complete cleanup
+	@docker system prune -a --volumes
+
 rebuild: down build up
 	@# Help: (dev) Re-build
 
