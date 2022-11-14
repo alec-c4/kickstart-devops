@@ -11,7 +11,7 @@ list:
 			| egrep -v -e '^[^[:alnum:]]' -e '^$@$$' \
 			| xargs -I _ sh -c 'printf "%-20s " _; make _ -nB | (grep -i "^# Help:" || echo "") | tail -1 | sed "s/^# Help: //g"'
 up:
-	@# Help: (dev) Run 
+	@# Help: (dev) Run
 	@docker compose up -d
 
 down:
@@ -30,7 +30,7 @@ prune:
 	@# Help: (dev) Complete cleanup
 	@docker system prune -a --volumes
 
-rebuild: down build up
+rebuild: build down up
 	@# Help: (dev) Re-build
 
 logs:
@@ -46,7 +46,7 @@ rm:
 	@docker compose rm
 
 prod-up:
-	@# Help: (prod) Run 
+	@# Help: (prod) Run
 	@docker compose $(PRODCONF) up -d
 
 prod-down:
@@ -61,7 +61,7 @@ prod-build:
 	@# Help: (prod) Build
 	@docker compose $(PRODCONF) build
 
-prod-rebuild: down build up
+prod-rebuild: prod-build prod-down prod-up
 	@# Help: (prod) Re-build
 
 prod-logs:
@@ -70,4 +70,4 @@ prod-logs:
 
 prod-ps:
 	@# Help: (prod) Show running containers
-	@docker compose $(PRODCONF) ps	
+	@docker compose $(PRODCONF) ps

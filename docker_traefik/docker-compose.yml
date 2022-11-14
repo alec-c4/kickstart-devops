@@ -1,8 +1,7 @@
-version: '3.9'
+version: "3.9"
 
 services:
-
-### Services 
+  ### Services
 
   postgres:
     image: "${APP_NAME}-postgres"
@@ -15,7 +14,7 @@ services:
       - app-admin
       - app-api
 
-### Apps
+  ### Apps
 
   app-main:
     container_name: "${APP_NAME}-main"
@@ -25,4 +24,3 @@ services:
 
   app-api:
     image: "traefik/whoami"
-  
